@@ -1,0 +1,33 @@
+Bootstrap: library
+From: ubuntu:22.04
+
+%files
+    # Copy the current directory (where the Singularity file is located) into /app in the container
+    . /app
+
+%post
+    # Update and install necessary packages including wget and bzip2 for Miniconda installation
+    apt-get update && apt-get install -y wget bzip2
+
+    # Install Miniconda
+    wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O /miniconda.sh
+    bash /miniconda.sh -b -p /opt/conda
+    rm /miniconda.sh
+
+    # Make conda command available
+    export PATH=/opt/conda/bin:$PATH
+
+    # Create the Conda environment using the environmentDockerEmoca.yml file
+    conda env create -f /app/environmentDockerEmoca.yml
+
+%environment
+    # Set environment variables here if needed, for example:
+    export NODE_ENV=production
+    export PATH=/opt/conda/envs/work38/bin:$PATH
+
+%runscript
+    # Activate the Conda environment and run the Python script
+    echo "Activating Conda environment 'work38'"
+    . "/opt/conda/etc/profile.d/conda.sh"
+    conda activate work38
+    exec python /app/gdl_apps/EMOCA/demos/test_emoca_on_images.py "$@"
