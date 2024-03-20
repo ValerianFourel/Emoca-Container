@@ -193,7 +193,6 @@ dependencies:
       - psutil==5.9.8
       - pycparser==2.21
       - python-dateutil==2.9.0.post0
-      - pytorch3d==0.6.2
       - pytz==2024.1
       - pywavelets==1.5.0
       - scikit-image==0.18.1
